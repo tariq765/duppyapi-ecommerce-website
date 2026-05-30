@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+
+# Next.js
+.next/
+out/
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+backend/.env
+
+# Env Files (Very Important)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Sanity
+/duppyapi/node_modules
+/duppyapi/.next
+
+# Misc
+.DS_Store
+*.log
