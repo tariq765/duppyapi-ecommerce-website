@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastProvider } from "./components/Toast";
@@ -35,7 +36,9 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <ToastProvider />
-            <Navbar />
+            <Suspense fallback={null}>
+              <Navbar />
+            </Suspense>
             {children}
             <Footer />
           </CartProvider>

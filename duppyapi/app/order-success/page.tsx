@@ -4,7 +4,9 @@ import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-export default function OrderSuccessPage() {
+import { Suspense } from "react";
+
+function OrderSuccessContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
 
@@ -39,5 +41,17 @@ export default function OrderSuccessPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function OrderSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+      </div>
+    }>
+      <OrderSuccessContent />
+    </Suspense>
   );
 }
