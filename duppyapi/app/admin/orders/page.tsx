@@ -19,16 +19,16 @@ interface Order {
 }
 
 export default function AdminOrdersPage() {
-  const { token, user } = useAuth();
+  const { accessToken, user } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (token) {
+    if (accessToken) {
       fetch(`${API_URL}/orders/admin/all`, {
         headers: {
-          "Authorization": `Bearer ${token}`
+          "Authorization": `Bearer ${accessToken}`
         }
       })
         .then(res => {
@@ -44,9 +44,9 @@ export default function AdminOrdersPage() {
           setLoading(false);
         });
     }
-  }, [token]);
+  }, [accessToken]);
 
-  if (!user || user.role !== "admin") {
+  if (!user || user.role.name !== "admin") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center p-10 bg-white rounded-3xl shadow-xl border border-red-100">

@@ -11,7 +11,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
-  const { token } = useAuth();
+  const { accessToken } = useAuth();
   const router = useRouter();
 
   // Form State
@@ -38,7 +38,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (!token) {
+    if (!accessToken) {
       setValidationError("Please login to place an order.");
       return;
     }
@@ -62,7 +62,7 @@ export default function CheckoutPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Authorization": `Bearer ${accessToken}`
         },
         body: JSON.stringify(orderData)
       });
