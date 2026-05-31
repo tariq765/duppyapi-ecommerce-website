@@ -195,7 +195,7 @@ function PaymentContent() {
 
               <button
                 type="submit"
-                disabled={!stripe || status === "processing"}
+                disabled={!stripe}
                 className="w-full bg-indigo-600 disabled:bg-gray-400 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-150 transition active:scale-[0.98]"
               >
                 Pay Securely ${orderTotal.toFixed(2)}
