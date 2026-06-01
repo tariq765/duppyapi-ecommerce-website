@@ -1,13 +1,58 @@
 "use client";
 
-import React from "react";
-import { FiMail, FiPhone, FiMapPin, FiClock } from "react-icons/fi";
+import React, { useState } from "react";
+import { FiMail, FiPhone, FiMapPin, FiClock, FiSend, FiCheckCircle } from "react-icons/fi";
+import { sendEmail } from "@/app/actions/email";
 
 export default function SupportPage() {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert("Message sent! We will get back to you soon.");
+    setIsSubmitting(true);
+    setError("");
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      subject: formData.get("subject") as string,
+      message: formData.get("message") as string,
+    };
+
+    const result = await sendEmail(data);
+
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      setError("Failed to send message. Please try again later.");
+    }
+    setIsSubmitting(false);
   };
+
+  if (submitted) {
+    return (
+      <div className="bg-gray-50 min-h-screen flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center animate-in zoom-in duration-300">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 text-green-600 rounded-full mb-6">
+            <FiCheckCircle size={32} />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Message Sent!</h2>
+          <p className="text-gray-600 mb-8">
+            Thank you for reaching out. We have received your message and will get back to you within 24 hours.
+          </p>
+          <button
+            onClick={() => setSubmitted(false)}
+            className="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition"
+          >
+            Send Another Message
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
@@ -30,6 +75,7 @@ export default function SupportPage() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Full Name</label>
                   <input
+                    name="name"
                     type="text"
                     required
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border"
@@ -39,6 +85,7 @@ export default function SupportPage() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Email Address</label>
                   <input
+                    name="email"
                     type="email"
                     required
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border"
@@ -49,6 +96,7 @@ export default function SupportPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700">Subject</label>
                 <input
+                  name="subject"
                   type="text"
                   required
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border"
@@ -58,17 +106,36 @@ export default function SupportPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700">Message</label>
                 <textarea
+                  name="message"
                   rows={4}
                   required
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 border"
                   placeholder="How can we help you?"
                 ></textarea>
               </div>
+              
+              {error && (
+                <p className="text-red-500 text-sm italic">{error}</p>
+              )}
+
               <button
                 type="submit"
-                className="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-lg"
+                disabled={isSubmitting}
+                className={`w-full flex items-center justify-center gap-2 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-lg ${
+                  isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+                }`}
               >
-                Send Message
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <FiSend size={18} />
+                    Send Message
+                  </>
+                )}
               </button>
             </form>
           </div>
@@ -123,3 +190,4 @@ export default function SupportPage() {
     </div>
   );
 }
+
