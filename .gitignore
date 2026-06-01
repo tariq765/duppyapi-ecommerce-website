@@ -28,3 +28,4 @@ backend/.env
 # Misc
 .DS_Store
 *.log
+.vercel

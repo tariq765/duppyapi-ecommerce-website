@@ -28,6 +28,8 @@ interface AuthContextProps extends AuthState {
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserResponseSchema | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -44,7 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchMe = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, { withCredentials: true });
+      const res = await axios.get(`${API_URL}/auth/me`, { withCredentials: true });
       setUser(res.data);
     } catch (err) {
       setUser(null);
@@ -66,7 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string, rememberMe = false) => {
     try {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        `${API_URL}/auth/login`,
         { email, password, rememberMe },
         { withCredentials: true }
       );
@@ -84,7 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signup = async (name: string, email: string, password: string) => {
     try {
       await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+        `${API_URL}/auth/signup`,
         { name, email, password },
         { withCredentials: true }
       );
@@ -97,7 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {}, { withCredentials: true });
+      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
       setUser(null);
       setAccessToken(null);
       setAuthHeader(null);
@@ -110,7 +112,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const refresh = async () => {
     try {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+        `${API_URL}/auth/refresh`,
         {},
         { withCredentials: true }
       );
