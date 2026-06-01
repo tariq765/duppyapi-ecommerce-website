@@ -115,39 +115,54 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <div className="md:hidden bg-white border-t border-gray-200">
+        <div className="md:hidden bg-white border-t border-gray-200 animate-in slide-in-from-top duration-300">
+          {/* Mobile Search Bar */}
+          <div className="px-4 py-3 border-b border-gray-100">
+            <form onSubmit={(e) => { handleSearch(e); setOpen(false); }} className="relative">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-sm"
+              />
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <HiSearch size={18} />
+              </span>
+            </form>
+          </div>
           <Link
             href="/"
-            onClick={() => setOpen(false)} // ← ye ab correct hoga
-            className="block px-4 py-2 hover:bg-gray-100"
+            onClick={() => setOpen(false)}
+            className="block px-4 py-3 hover:bg-gray-50 text-gray-700 font-medium"
           >
             Home
           </Link>
           <Link
             href="/products"
             onClick={() => setOpen(false)}
-            className="block px-4 py-2 hover:bg-gray-100"
+            className="block px-4 py-3 hover:bg-gray-50 text-gray-700 font-medium"
           >
             Products
           </Link>
           <Link
             href="/about"
             onClick={() => setOpen(false)}
-            className="block px-4 py-2 hover:bg-gray-100"
+            className="block px-4 py-3 hover:bg-gray-50 text-gray-700 font-medium"
           >
             About
           </Link>
           <Link
             href="/contact"
             onClick={() => setOpen(false)}
-            className="block px-4 py-2 hover:bg-gray-100"
+            className="block px-4 py-3 hover:bg-gray-50 text-gray-700 font-medium"
           >
             Contact
           </Link>
           {user ? (
-            <>
-              <div className="px-4 py-2 border-t border-gray-100 bg-gray-50">
-                <span className="text-sm text-gray-500">Logged in as</span>
+            <div className="border-t border-gray-100 bg-gray-50/50">
+              <div className="px-4 py-3">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">Logged in as</span>
                 <p className="font-semibold text-gray-900">{user.name}</p>
               </div>
               <button
@@ -155,35 +170,35 @@ export default function Navbar() {
                   logout();
                   setOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 font-medium"
+                className="block w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 font-medium border-t border-gray-100"
               >
                 Logout
               </button>
-            </>
+            </div>
           ) : (
-            <>
+            <div className="border-t border-gray-100">
               <Link
                 href="/login"
                 onClick={() => setOpen(false)}
-                className="block px-4 py-2 hover:bg-gray-100 font-medium"
+                className="block px-4 py-3 hover:bg-gray-50 text-gray-700 font-medium"
               >
                 Login
               </Link>
               <Link
                 href="/signup"
                 onClick={() => setOpen(false)}
-                className="block px-4 py-2 bg-indigo-600 text-white font-medium"
+                className="block px-4 py-3 bg-indigo-600 text-white font-semibold text-center"
               >
                 Sign Up
               </Link>
-            </>
+            </div>
           )}
           <Link
             href="/cart"
             onClick={() => setOpen(false)}
-            className="block px-4 py-2 bg-indigo-50 hover:bg-indigo-100 font-semibold text-indigo-700 flex justify-between items-center"
+            className="block px-4 py-3 bg-indigo-50 hover:bg-indigo-100 font-semibold text-indigo-700 flex justify-between items-center"
           >
-            <span>🛒 My Cart</span>
+            <span className="flex items-center gap-2">🛒 My Cart</span>
             {cartCount > 0 && (
               <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                 {cartCount}
