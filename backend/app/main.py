@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from .routes import auth, products, orders
+from .routes import auth, products, orders, chatbot
 from .deps import get_settings
 from .sync_service import sync_sanity_to_postgres
 
@@ -41,6 +41,8 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 app.include_router(auth.router, prefix="/auth")
 app.include_router(products.router, prefix="/products", tags=["products"])
 app.include_router(orders.router, prefix="/orders", tags=["orders"])
+app.include_router(chatbot.router, prefix="/chatbot", tags=["chatbot"])
+
 
 # Root endpoint for health check
 @app.get("/")

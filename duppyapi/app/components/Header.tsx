@@ -5,11 +5,11 @@ const Header = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
-    { src: "daraz1.avif", link: "https://www.daraz.pk/" },
-    { src: "draz2.avif", link: "https://www.daraz.pk/" },
-    { src: "draz3.avif", link: "https://www.daraz.pk/" },
-    { src: "draz4.avif", link: "https://www.daraz.pk/" },
-    { src: "draz5.avif", link: "https://www.daraz.pk/" },
+    { src: "daraz1.avif", link: "/products" },
+    { src: "draz2.avif", link: "/products" },
+    { src: "draz3.avif", link: "/products" },
+    { src: "draz4.avif", link: "/products" },
+    { src: "draz5.avif", link: "/products" },
   ];
 
   useEffect(() => {

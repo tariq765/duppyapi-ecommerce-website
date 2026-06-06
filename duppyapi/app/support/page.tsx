@@ -62,7 +62,7 @@ export default function SupportPage() {
             Contact Us & Support
           </h1>
           <p className="mt-4 text-xl text-gray-500">
-            Have a question? We're here to help. Send us a message or use our contact details.
+            Have a question? We&apos;re here to help. Send us a message or use our contact details.
           </p>
         </div>
 

@@ -6,6 +6,12 @@ import Link from "next/link";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
+interface OrderItem {
+  product_title: string;
+  quantity: number;
+  price: number;
+}
+
 interface Order {
   id: string;
   user_name: string;
@@ -13,9 +19,16 @@ interface Order {
   total_amount: number;
   status: string;
   payment_method: string;
-  shipping_address: any;
+  shipping_address: {
+    firstName: string;
+    lastName: string;
+    address: string;
+    city: string;
+    postalCode: string;
+    phone: string;
+  };
   created_at: string;
-  items: any[];
+  items: OrderItem[];
 }
 
 export default function AdminOrdersPage() {

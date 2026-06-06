@@ -124,6 +124,57 @@ async def create_order(
         "payfast_params": params
     }
 
+@router.patch("/{order_id}/status", response_model=dict)
+async def update_order_status(
+    order_id: int,
+    status_in: str, # pending, paid, shipped, cancelled
+    db: Annotated[AsyncSession, Depends(get_db)],
+    admin: Annotated[models.User, Depends(get_current_admin)]
+):
+    from sqlalchemy import select
+    result = await db.execute(select(models.Order).where(models.Order.id == order_id))
+    order = result.scalar_one_or_none()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    order.status = status_in
+    await db.commit()
+    return {"status": "success", "new_status": status_in}
+
+@router.get("/me", response_model=list)
+async def list_user_orders(
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[models.User, Depends(get_current_user)]
+):
+    from sqlalchemy import select
+    from sqlalchemy.orm import selectinload
+    
+    result = await db.execute(
+        select(models.Order)
+        .where(models.Order.user_id == current_user.id)
+        .options(selectinload(models.Order.items).selectinload(models.OrderItem.product))
+        .order_by(models.Order.created_at.desc())
+    )
+    orders = result.scalars().all()
+    
+    output = []
+    for order in orders:
+        output.append({
+            "id": order.id,
+            "total_amount": order.total_amount,
+            "status": order.status,
+            "payment_method": order.payment_method,
+            "created_at": order.created_at.isoformat(),
+            "items": [
+                {
+                    "product_title": item.product.title,
+                    "quantity": item.quantity,
+                    "price": item.price
+                } for item in order.items
+            ]
+        })
+    return output
+
 @router.get("/{order_id}", response_model=dict)
 async def get_order_details(
     order_id: str,

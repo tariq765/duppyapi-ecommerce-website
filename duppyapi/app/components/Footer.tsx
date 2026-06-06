@@ -17,21 +17,21 @@ const socialLinks = [
 const footerLinks = {
   shop: [
     { label: "All Products", href: "/products" },
-    { label: "Categories", href: "/categories" },
     { label: "New Arrivals", href: "/products" },
     { label: "Best Sellers", href: "/products" },
+    { label: "Featured", href: "/products" },
   ],
   account: [
     { label: "My Account", href: "/profile" },
-    { label: "Order History", href: "/profile/orders" },
-    { label: "Wishlist", href: "/profile/wishlist" },
-    { label: "Track Order", href: "/profile/orders" },
+    { label: "My Orders", href: "/orders" },
+    { label: "Cart", href: "/cart" },
+    { label: "Checkout", href: "/checkout" },
   ],
   support: [
     { label: "Help Center", href: "/support" },
     { label: "FAQ", href: "/faq" },
     { label: "Contact Us", href: "/support" },
-    { label: "Returns", href: "/policy/returns" },
+    { label: "Track Order", href: "/orders" },
   ],
   policies: [
     { label: "Privacy Policy", href: "/policy/privacy" },

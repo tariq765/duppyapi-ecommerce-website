@@ -16,7 +16,7 @@ export default function CartPage() {
       <div className="min-h-[70vh] flex flex-col items-center justify-center p-5 text-center bg-gray-50">
         <div className="text-6xl mb-4">🛒</div>
         <h2 className="text-3xl font-extrabold text-gray-800 mb-2">Your Cart is Empty</h2>
-        <p className="text-gray-500 mb-8 max-w-sm">Looks like you haven't added anything to your cart yet. Go check out some amazing products!</p>
+        <p className="text-gray-500 mb-8 max-w-sm">Looks like you haven&apos;t added anything to your cart yet. Go check out some amazing products!</p>
         <Link
           href="/products"
           className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-indigo-150 transition active:scale-[0.98]"

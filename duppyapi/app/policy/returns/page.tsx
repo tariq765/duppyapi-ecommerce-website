@@ -21,7 +21,7 @@ export default function ReturnPolicy() {
             <p>
               Once we receive your item, we will inspect it and notify you that we have received your returned item. 
               If your return is approved, we will initiate a refund to your original method of payment (or bank transfer). 
-              You will receive the credit within a certain amount of days, depending on your card issuer's policies.
+              You will receive the credit within a certain amount of days, depending on your card issuer&apos;s policies.
             </p>
           </section>
 

@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     PAYFAST_MERCHANT_ID: str = Field(default="12345", env="PAYFAST_MERCHANT_ID")
     PAYFAST_SECURED_KEY: str = Field(default="abcde", env="PAYFAST_SECURED_KEY")
     PAYFAST_MODE: str = Field(default="test", env="PAYFAST_MODE")
+    GEMINI_API_KEY: str = Field(default="", env="GEMINI_API_KEY")
+
 
     class Config:
         env_file = os.path.join(os.path.dirname(__file__), "..", ".env")

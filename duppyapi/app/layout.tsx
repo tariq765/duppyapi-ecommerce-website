@@ -6,6 +6,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ToastProvider } from "./components/Toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Chatbot from "./components/Chatbot";
 import { CartProvider } from "@/app/context/CartContext";
 
 const geistSans = Geist({
@@ -41,9 +42,11 @@ export default function RootLayout({
             </Suspense>
             {children}
             <Footer />
+            <Chatbot />
           </CartProvider>
         </AuthProvider>
       </body>
     </html>
   );
 }
+
