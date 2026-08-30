@@ -16,11 +16,12 @@ router = APIRouter()
 settings = get_settings()
 
 # Initialize Gemini API if key is present
+gemini_api_key = getattr(settings, "GEMINI_API_KEY", "") or os.environ.get("GEMINI_API_KEY", "")
 gemini_available = False
 try:
-    if settings.GEMINI_API_KEY:
+    if gemini_api_key:
         import google.generativeai as genai
-        genai.configure(api_key=settings.GEMINI_API_KEY)
+        genai.configure(api_key=gemini_api_key)
         gemini_available = True
         logger.info("Gemini API initialized successfully.")
     else:
