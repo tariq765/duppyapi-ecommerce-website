@@ -20,6 +20,7 @@ async def startup_event():
 # Allow frontend origin
 origins = [
     settings.FRONTEND_ORIGIN,
+    "https://duppyapi-ecommerce-website.vercel.app",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:3001",
@@ -29,6 +30,7 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
