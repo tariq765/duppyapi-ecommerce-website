@@ -36,11 +36,12 @@ def get_engine() -> AsyncEngine:
     if _engine is None:
         settings = get_settings()
         # For Neon/PostgreSQL, we often need SSL. 
-        # If the URL doesn't have it, we can add it here or via connect_args.
         _engine = create_async_engine(
             settings.DATABASE_URL,
             echo=False,
             future=True,
+            pool_pre_ping=True,
+            pool_recycle=300,
             connect_args={"ssl": "require"} if "neon.tech" in settings.DATABASE_URL else {}
         )
     return _engine
