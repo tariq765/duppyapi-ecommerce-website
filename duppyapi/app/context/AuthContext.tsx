@@ -44,9 +44,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const fetchMe = async () => {
+  const fetchMe = async (token?: string) => {
+    const activeToken = token || accessToken || (typeof window !== 'undefined' ? localStorage.getItem("duppy_access_token") : null);
+    if (!activeToken) {
+      setUser(null);
+      return;
+    }
     try {
-      const res = await axios.get(`${API_URL}/auth/me`, { withCredentials: true });
+      const res = await axios.get(`${API_URL}/auth/me`, {
+        headers: { Authorization: `Bearer ${activeToken}` }
+      });
       setUser(res.data);
     } catch (err) {
       setUser(null);
@@ -57,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const detail = err.response?.data?.detail;
     if (typeof detail === "string") return detail;
     if (Array.isArray(detail) && detail.length > 0 && detail[0].msg) {
-      return detail[0].msg; // extract message from Pydantic validation error
+      return detail[0].msg;
     }
     if (typeof detail === "object" && detail !== null && detail.msg) {
       return detail.msg;
@@ -69,13 +76,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await axios.post(
         `${API_URL}/auth/login`,
-        { email, password, rememberMe },
-        { withCredentials: true }
+        { email, password, rememberMe }
       );
       const token = res.data.access_token;
       setAccessToken(token);
       setAuthHeader(token);
-      await fetchMe();
+      if (typeof window !== 'undefined') {
+        localStorage.setItem("duppy_access_token", token);
+      }
+      await fetchMe(token);
       toast.success("Logged in");
     } catch (err: any) {
       toast.error(getErrorMessage(err, "Login failed"));
@@ -87,8 +96,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await axios.post(
         `${API_URL}/auth/signup`,
-        { name, email, password },
-        { withCredentials: true }
+        { name, email, password }
       );
       toast.success("Account created – please log in");
     } catch (err: any) {
@@ -99,10 +107,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
-      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
+      if (accessToken) {
+        await axios.post(`${API_URL}/auth/logout`, {}, {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        }).catch(() => {});
+      }
       setUser(null);
       setAccessToken(null);
       setAuthHeader(null);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem("duppy_access_token");
+      }
       toast.success("Logged out");
     } catch (err: any) {
       toast.error("Logout failed");
@@ -111,28 +126,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const refresh = async () => {
     try {
-      const res = await axios.post(
-        `${API_URL}/auth/refresh`,
-        {},
-        { withCredentials: true }
-      );
-      const token = res.data.access_token;
-      setAccessToken(token);
-      setAuthHeader(token);
+      const storedToken = typeof window !== 'undefined' ? localStorage.getItem("duppy_access_token") : null;
+      if (storedToken) {
+        setAccessToken(storedToken);
+        setAuthHeader(storedToken);
+        await fetchMe(storedToken);
+      }
     } catch (err) {
-      // Refresh failed – clear auth state
       setUser(null);
       setAccessToken(null);
       setAuthHeader(null);
     }
   };
 
-  // On mount, try to refresh token and fetch user
+  // On mount, try to restore auth state
   useEffect(() => {
     const init = async () => {
       try {
-        await refresh();
-        await fetchMe();
+        const storedToken = typeof window !== 'undefined' ? localStorage.getItem("duppy_access_token") : null;
+        if (storedToken) {
+          setAccessToken(storedToken);
+          setAuthHeader(storedToken);
+          await fetchMe(storedToken);
+        }
       } finally {
         setLoading(false);
       }
